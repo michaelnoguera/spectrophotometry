@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 '''
 Spectrophotometry program used for our mystery mixture lab in AP Chem.
+
+Run it from the command line as `python spectrophotometry.py data_file.csv`.
 '''
 
 import sys  # system library, used to read in arguments, as this is a command line app
@@ -43,6 +45,17 @@ df.drop(list(df.filter(regex='\:Wavelength\(nm\)')), axis=1, inplace=True)
 df.rename(columns=lambda s: s.replace(
     ":Absorbance", "").strip(), inplace=True)
 
+# Try to automatically match columns with their contents
+for column in df.columns:
+    if "red" in column.lower():
+        df.rename(columns={column: "Red"}, inplace=True)
+    if "blue" in column.lower():
+        df.rename(columns={column: "Blue"}, inplace=True)
+    if "yellow" in column.lower():
+        df.rename(columns={column: "Yellow"}, inplace=True)
+    if "mystery" in column.lower():
+        df.rename(columns={column: "Experimental"}, inplace=True)
+
 # Match up missing columns
 for column in ["Red", "Blue", "Yellow", "Experimental"]:
     if not column in df.columns: # a column is missing, make the user match it up
@@ -52,6 +65,9 @@ for column in ["Red", "Blue", "Yellow", "Experimental"]:
         df.rename(
             columns={df.columns[int(input(column+" = ").strip())]: column}, inplace=True)  # rename descriptively based on user input
         print("\n")
+
+# Put columns in order
+df = df[["Wavelength", "Yellow", "Red", "Blue", "Experimental"]]
 
 # Output table preview to the user
 print(df.head())
