@@ -89,6 +89,11 @@ print("...")
 # Optimization routine
 ###
 
+# Adjust for stock concentration being not equal to one unit per volume
+stock_concentration: float = 12.00  # constant for stock solution concentration
+df[['Yellow', 'Red', 'Blue']] = df[['Yellow', 'Red', 'Blue']].div(
+    stock_concentration)  # divide all data values by stock sample concentration
+
 # Optimize for best solution
 def error(yrb: List[float]) -> float:
     ''' Function that calculates the total error for a given concentration combination.
