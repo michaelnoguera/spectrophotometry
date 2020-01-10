@@ -103,3 +103,16 @@ def error(yrb: List[float]) -> float:
         ret += ((row['Yellow']*yrb[0])+(row['Red']*yrb[1]) +
                 (row['Blue']*yrb[2])-row['Experimental'])**2
     return ret
+
+result: optimize.OptimizeResult = optimize.minimize(
+    fun=error, x0=[2, 2, 2], bounds=[(0, 12), (0, 12), (0, 12)], method='L-BFGS-B')
+
+# Output solution to user
+print("\nSOLUTION FOUND (and pun intended)")
+print("\033[1;33m"+str(round(dict(result.items())['x'][0], 3)) +
+      "\033[0;33m\tparts yellow\033[0m")
+print("\033[1;31m"+str(round(dict(result.items())['x'][1], 3)) +
+      "\033[0;31m\tparts red\033[0m")
+print("\033[1;34m"+str(round(dict(result.items())['x'][2], 3)) +
+      "\033[0;34m\tparts blue\033[0m")
+print("error of "+str(round(dict(result.items())['fun'], 3)))
