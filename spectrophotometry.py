@@ -3,7 +3,19 @@
 '''
 Spectrophotometry program used for our mystery mixture lab in AP Chem.
 
+Designed to work with CSV exports from Vernier's Graphical Analysis program. Required inputs are
+a spectrophotogram for the unknown mystery mixture, pure yellow, pure red, and pure blue, and the 
+ratio of yellow, red, and blue in the mixture will be output. Input data sets must all have the same 
+wavelengths as dependent variables, as the program does not account for possible misalignments.
+
 Run it from the command line as `python spectrophotometry.py data_file.csv`.
+
+Dependencies
+------------
+- `Python 3`, written with 3.7.6, but should be compatible with older Python 3 versions.
+- `pandas` library for data analysis
+- `optimize` submodule of the `scipy` library
+- `List` submodule of the `typing` library
 '''
 
 import sys  # system library, used to read in arguments, as this is a command line app
@@ -72,3 +84,22 @@ df = df[["Wavelength", "Yellow", "Red", "Blue", "Experimental"]]
 # Output table preview to the user
 print(df.head())
 print("...")
+
+###
+# Optimization routine
+###
+
+# Optimize for best solution
+def error(yrb: List[float]) -> float:
+    ''' Function that calculates the total error for a given concentration combination.
+
+    Arguments:
+    yrb: List[float] -- A list containing the concentrations of [yellow, red, blue] in that order.
+
+    Returns: the total least-squares error for that combination across all included wavelengths.
+    '''
+    ret: float = 0
+    for (index, row) in df.iterrows():
+        ret += ((row['Yellow']*yrb[0])+(row['Red']*yrb[1]) +
+                (row['Blue']*yrb[2])-row['Experimental'])**2
+    return ret
