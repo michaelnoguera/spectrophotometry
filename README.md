@@ -1,4 +1,4 @@
-#Spectrophotometry.py
+# Spectrophotometry.py
 To determine the composition of a mystery mixture consisting of various types of food coloring, I wrote this program that works with Vernier's Spectral Analysis software. It will determine the ratio between the concentrations of yellow, red, and blue are in the mystery solution given four spectrophotograms: a yellow, a red, a blue, and the mystery one.
 
 One limitation of the program is that the wavelength values need to line up across the CSV table- thus all the data used must be collected at the same time.
